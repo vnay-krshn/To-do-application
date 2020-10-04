@@ -17,18 +17,30 @@
 <body>
     <div class="container-fluid bg-dark p-4">
         <h2 class="text-white pt-5">To-do list</h2>
-        <form class="form-group pt-3">
+        <form action="{% url 'add' %}" method="POST" role="form" class="form-group pt-3">
+            {% csrf_token %}
             <label for="task" class="text-white">Enter task</label>
-            <input id="task" class="form-control" type="text">
-            <button class="btn bg-light mt-2 mb-2">Delete</button>
-            <button class="btn bg-success mt-3 ml-3 mb-3">Clear all</button>
+            <div class="form-group">
+                <div class="input-group">
+                    {{form.text}} 
+                    <span class="input-group-btn">
+                        <button class="btn btn-danger ml-3 ">Add</button> 
+                    </span>
+                </div>
+            </div> 
+            <a href="{% url 'deleteCompleted' %}">
+                <button type="button" class="btn bg-light mt-2 mb-2">Delete</button>
+            </a>  
+            <a href="{% url 'deleteAll' %}">
+                <button type="button" class="btn bg-success mt-3 ml-3 mb-3">Clear all</button>
+            </a>        
         </form>
         <ul class="list-group">
             {% for todolist in todo_items %}
                 {% if todolist.completed %}
-                    <li class="list-group-item todo-completed">{{todolist.text}}</li>
+                    <li class="list-group-item todo-completed active">{{todolist.text}}</li>
                 {%else%}
-                   <a href="#"><li class="list-group-item">{{todolist.text}}</li></a>
+                   <a href="{% url 'completed' todolist.id %}"><li class="list-group-item">{{todolist.text}}</li></a>
                 {%endif%}
             {% endfor %}
         </ul>
